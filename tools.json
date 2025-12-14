@@ -1,0 +1,2146 @@
+[
+  {
+    "jsonrpc": "2.0",
+    "id": 2,
+    "result": {
+      "tools": [
+        {
+          "name": "batch_execute",
+          "description": "Runs a list of MCP tool calls as one batch. Use it to send a full sequence of commands, inspect the results, then submit the next batch for the following step.",
+          "inputSchema": {
+            "properties": {
+              "commands": {
+                "description": "List of commands with 'tool' and 'params' keys.",
+                "items": {
+                  "additionalProperties": true,
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              "parallel": {
+                "anyOf": [
+                  {
+                    "type": "boolean"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "description": "Attempt to run read-only commands in parallel"
+              },
+              "fail_fast": {
+                "anyOf": [
+                  {
+                    "type": "boolean"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "description": "Stop processing after the first failure"
+              },
+              "max_parallelism": {
+                "anyOf": [
+                  {
+                    "type": "integer"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "description": "Hint for the maximum number of parallel workers"
+              }
+            },
+            "required": [
+              "commands"
+            ],
+            "type": "object"
+          },
+          "outputSchema": {
+            "additionalProperties": true,
+            "type": "object"
+          },
+          "_meta": {
+            "_fastmcp": {
+              "tags": []
+            }
+          }
+        },
+        {
+          "name": "debug_request_context",
+          "description": "Return the current FastMCP request context details (client_id, session_id, and meta dump).",
+          "inputSchema": {
+            "properties": {},
+            "type": "object"
+          },
+          "outputSchema": {
+            "additionalProperties": true,
+            "type": "object"
+          },
+          "_meta": {
+            "_fastmcp": {
+              "tags": []
+            }
+          }
+        },
+        {
+          "name": "execute_custom_tool",
+          "description": "Execute a project-scoped custom tool registered by Unity.",
+          "inputSchema": {
+            "properties": {
+              "tool_name": {
+                "type": "string"
+              },
+              "parameters": {
+                "anyOf": [
+                  {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              }
+            },
+            "required": [
+              "tool_name"
+            ],
+            "type": "object"
+          },
+          "outputSchema": {
+            "properties": {
+              "success": {
+                "type": "boolean"
+              },
+              "message": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              },
+              "error": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              },
+              "data": {
+                "anyOf": [
+                  {},
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              },
+              "hint": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              }
+            },
+            "required": [
+              "success"
+            ],
+            "type": "object"
+          },
+          "_meta": {
+            "_fastmcp": {
+              "tags": []
+            }
+          }
+        },
+        {
+          "name": "execute_menu_item",
+          "description": "Execute a Unity menu item by path.",
+          "inputSchema": {
+            "properties": {
+              "menu_path": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              }
+            },
+            "type": "object"
+          },
+          "outputSchema": {
+            "properties": {
+              "success": {
+                "type": "boolean"
+              },
+              "message": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              },
+              "error": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              },
+              "data": {
+                "anyOf": [
+                  {},
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              },
+              "hint": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              }
+            },
+            "required": [
+              "success"
+            ],
+            "type": "object"
+          },
+          "_meta": {
+            "_fastmcp": {
+              "tags": []
+            }
+          }
+        },
+        {
+          "name": "find_in_file",
+          "description": "Searches a file with a regex pattern and returns line numbers and excerpts.",
+          "inputSchema": {
+            "properties": {
+              "uri": {
+                "description": "The resource URI to search under Assets/ or file path form supported by read_resource",
+                "type": "string"
+              },
+              "pattern": {
+                "description": "The regex pattern to search for",
+                "type": "string"
+              },
+              "project_root": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "description": "Optional project root path"
+              },
+              "max_results": {
+                "default": 200,
+                "description": "Cap results to avoid huge payloads",
+                "type": "integer"
+              },
+              "ignore_case": {
+                "anyOf": [
+                  {
+                    "type": "boolean"
+                  },
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": true,
+                "description": "Case insensitive search"
+              }
+            },
+            "required": [
+              "uri",
+              "pattern"
+            ],
+            "type": "object"
+          },
+          "outputSchema": {
+            "additionalProperties": true,
+            "type": "object"
+          },
+          "_meta": {
+            "_fastmcp": {
+              "tags": []
+            }
+          }
+        },
+        {
+          "name": "manage_asset",
+          "description": "Performs asset operations (import, create, modify, delete, etc.) in Unity.",
+          "inputSchema": {
+            "properties": {
+              "action": {
+                "description": "Perform CRUD operations on assets.",
+                "enum": [
+                  "import",
+                  "create",
+                  "modify",
+                  "delete",
+                  "duplicate",
+                  "move",
+                  "rename",
+                  "search",
+                  "get_info",
+                  "create_folder",
+                  "get_components"
+                ],
+                "type": "string"
+              },
+              "path": {
+                "description": "Asset path (e.g., 'Materials/MyMaterial.mat') or search scope.",
+                "type": "string"
+              },
+              "asset_type": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              },
+              "properties": {
+                "anyOf": [
+                  {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              },
+              "destination": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              },
+              "generate_preview": {
+                "default": false,
+                "description": "Generate a preview/thumbnail for the asset when supported.",
+                "type": "boolean"
+              },
+              "search_pattern": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              },
+              "filter_type": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              },
+              "filter_date_after": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              },
+              "page_size": {
+                "anyOf": [
+                  {
+                    "type": "integer"
+                  },
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              },
+              "page_number": {
+                "anyOf": [
+                  {
+                    "type": "integer"
+                  },
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              }
+            },
+            "required": [
+              "action",
+              "path"
+            ],
+            "type": "object"
+          },
+          "outputSchema": {
+            "additionalProperties": true,
+            "type": "object"
+          },
+          "_meta": {
+            "_fastmcp": {
+              "tags": []
+            }
+          }
+        },
+        {
+          "name": "manage_editor",
+          "description": "Controls and queries the Unity editor's state and settings. Tip: pass booleans as true/false; if your client only sends strings, 'true'/'false' are accepted.",
+          "inputSchema": {
+            "properties": {
+              "action": {
+                "description": "Get and update the Unity Editor state.",
+                "enum": [
+                  "telemetry_status",
+                  "telemetry_ping",
+                  "play",
+                  "pause",
+                  "stop",
+                  "set_active_tool",
+                  "add_tag",
+                  "remove_tag",
+                  "add_layer",
+                  "remove_layer"
+                ],
+                "type": "string"
+              },
+              "wait_for_completion": {
+                "anyOf": [
+                  {
+                    "type": "boolean"
+                  },
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              },
+              "tool_name": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              },
+              "tag_name": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              },
+              "layer_name": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              }
+            },
+            "required": [
+              "action"
+            ],
+            "type": "object"
+          },
+          "outputSchema": {
+            "additionalProperties": true,
+            "type": "object"
+          },
+          "_meta": {
+            "_fastmcp": {
+              "tags": []
+            }
+          }
+        },
+        {
+          "name": "manage_gameobject",
+          "description": "Performs CRUD operations on GameObjects and components.",
+          "inputSchema": {
+            "properties": {
+              "action": {
+                "anyOf": [
+                  {
+                    "enum": [
+                      "create",
+                      "modify",
+                      "delete",
+                      "find",
+                      "add_component",
+                      "remove_component",
+                      "set_component_property",
+                      "get_components",
+                      "get_component",
+                      "duplicate",
+                      "move_relative"
+                    ],
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              },
+              "target": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              },
+              "search_method": {
+                "anyOf": [
+                  {
+                    "enum": [
+                      "by_id",
+                      "by_name",
+                      "by_path",
+                      "by_tag",
+                      "by_layer",
+                      "by_component"
+                    ],
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              },
+              "name": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              },
+              "tag": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              },
+              "parent": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              },
+              "position": {
+                "anyOf": [
+                  {
+                    "items": {
+                      "type": "number"
+                    },
+                    "type": "array"
+                  },
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              },
+              "rotation": {
+                "anyOf": [
+                  {
+                    "items": {
+                      "type": "number"
+                    },
+                    "type": "array"
+                  },
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              },
+              "scale": {
+                "anyOf": [
+                  {
+                    "items": {
+                      "type": "number"
+                    },
+                    "type": "array"
+                  },
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              },
+              "components_to_add": {
+                "anyOf": [
+                  {
+                    "items": {
+                      "type": "string"
+                    },
+                    "type": "array"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              },
+              "primitive_type": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              },
+              "save_as_prefab": {
+                "anyOf": [
+                  {
+                    "type": "boolean"
+                  },
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              },
+              "prefab_path": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              },
+              "prefab_folder": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              },
+              "set_active": {
+                "anyOf": [
+                  {
+                    "type": "boolean"
+                  },
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              },
+              "layer": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              },
+              "components_to_remove": {
+                "anyOf": [
+                  {
+                    "items": {
+                      "type": "string"
+                    },
+                    "type": "array"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              },
+              "component_properties": {
+                "anyOf": [
+                  {
+                    "additionalProperties": {
+                      "additionalProperties": true,
+                      "type": "object"
+                    },
+                    "type": "object"
+                  },
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              },
+              "search_term": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              },
+              "find_all": {
+                "anyOf": [
+                  {
+                    "type": "boolean"
+                  },
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              },
+              "search_in_children": {
+                "anyOf": [
+                  {
+                    "type": "boolean"
+                  },
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              },
+              "search_inactive": {
+                "anyOf": [
+                  {
+                    "type": "boolean"
+                  },
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              },
+              "component_name": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              },
+              "includeNonPublicSerialized": {
+                "anyOf": [
+                  {
+                    "type": "boolean"
+                  },
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              },
+              "new_name": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              },
+              "offset": {
+                "anyOf": [
+                  {
+                    "items": {
+                      "type": "number"
+                    },
+                    "type": "array"
+                  },
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              },
+              "reference_object": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              },
+              "direction": {
+                "anyOf": [
+                  {
+                    "enum": [
+                      "left",
+                      "right",
+                      "up",
+                      "down",
+                      "forward",
+                      "back",
+                      "front",
+                      "backward",
+                      "behind"
+                    ],
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              },
+              "distance": {
+                "anyOf": [
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              },
+              "world_space": {
+                "anyOf": [
+                  {
+                    "type": "boolean"
+                  },
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              }
+            },
+            "type": "object"
+          },
+          "outputSchema": {
+            "additionalProperties": true,
+            "type": "object"
+          },
+          "_meta": {
+            "_fastmcp": {
+              "tags": []
+            }
+          }
+        },
+        {
+          "name": "manage_material",
+          "description": "Manages Unity materials (set properties, colors, shaders, etc).",
+          "inputSchema": {
+            "properties": {
+              "action": {
+                "description": "Action to perform.",
+                "enum": [
+                  "ping",
+                  "create",
+                  "set_material_shader_property",
+                  "set_material_color",
+                  "assign_material_to_renderer",
+                  "set_renderer_color",
+                  "get_material_info"
+                ],
+                "type": "string"
+              },
+              "material_path": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              },
+              "property": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              },
+              "shader": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              },
+              "properties": {
+                "anyOf": [
+                  {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              },
+              "value": {
+                "anyOf": [
+                  {
+                    "items": {},
+                    "type": "array"
+                  },
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "integer"
+                  },
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "boolean"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              },
+              "color": {
+                "anyOf": [
+                  {
+                    "items": {
+                      "type": "number"
+                    },
+                    "type": "array"
+                  },
+                  {
+                    "items": {
+                      "type": "integer"
+                    },
+                    "type": "array"
+                  },
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              },
+              "target": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              },
+              "search_method": {
+                "anyOf": [
+                  {
+                    "enum": [
+                      "by_name",
+                      "by_path",
+                      "by_tag",
+                      "by_layer",
+                      "by_component"
+                    ],
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              },
+              "slot": {
+                "anyOf": [
+                  {
+                    "type": "integer"
+                  },
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              },
+              "mode": {
+                "anyOf": [
+                  {
+                    "enum": [
+                      "shared",
+                      "instance",
+                      "property_block"
+                    ],
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              }
+            },
+            "required": [
+              "action"
+            ],
+            "type": "object"
+          },
+          "outputSchema": {
+            "additionalProperties": true,
+            "type": "object"
+          },
+          "_meta": {
+            "_fastmcp": {
+              "tags": []
+            }
+          }
+        },
+        {
+          "name": "manage_prefabs",
+          "description": "Performs prefab operations (open_stage, close_stage, save_open_stage, create_from_gameobject).",
+          "inputSchema": {
+            "properties": {
+              "action": {
+                "description": "Perform prefab operations.",
+                "enum": [
+                  "open_stage",
+                  "close_stage",
+                  "save_open_stage",
+                  "create_from_gameobject"
+                ],
+                "type": "string"
+              },
+              "prefab_path": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              },
+              "mode": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              },
+              "save_before_close": {
+                "anyOf": [
+                  {
+                    "type": "boolean"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              },
+              "target": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              },
+              "allow_overwrite": {
+                "anyOf": [
+                  {
+                    "type": "boolean"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              },
+              "search_inactive": {
+                "anyOf": [
+                  {
+                    "type": "boolean"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              }
+            },
+            "required": [
+              "action"
+            ],
+            "type": "object"
+          },
+          "outputSchema": {
+            "additionalProperties": true,
+            "type": "object"
+          },
+          "_meta": {
+            "_fastmcp": {
+              "tags": []
+            }
+          }
+        },
+        {
+          "name": "manage_scene",
+          "description": "Performs CRUD operations on Unity scenes.",
+          "inputSchema": {
+            "properties": {
+              "action": {
+                "description": "Perform CRUD operations on Unity scenes, and capture a screenshot.",
+                "enum": [
+                  "create",
+                  "load",
+                  "save",
+                  "get_hierarchy",
+                  "get_active",
+                  "get_build_settings",
+                  "screenshot"
+                ],
+                "type": "string"
+              },
+              "name": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              },
+              "path": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              },
+              "build_index": {
+                "anyOf": [
+                  {
+                    "type": "integer"
+                  },
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              },
+              "screenshot_file_name": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              },
+              "screenshot_super_size": {
+                "anyOf": [
+                  {
+                    "type": "integer"
+                  },
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              }
+            },
+            "required": [
+              "action"
+            ],
+            "type": "object"
+          },
+          "outputSchema": {
+            "additionalProperties": true,
+            "type": "object"
+          },
+          "_meta": {
+            "_fastmcp": {
+              "tags": []
+            }
+          }
+        },
+        {
+          "name": "apply_text_edits",
+          "description": "Apply small text edits to a C# script identified by URI.\n    IMPORTANT: This tool replaces EXACT character positions. Always verify content at target lines/columns BEFORE editing!\n    RECOMMENDED WORKFLOW:\n        1. First call resources/read with start_line/line_count to verify exact content\n        2. Count columns carefully (or use find_in_file to locate patterns)\n        3. Apply your edit with precise coordinates\n        4. Consider script_apply_edits with anchors for safer pattern-based replacements\n    Notes:\n        - For method/class operations, use script_apply_edits (safer, structured edits)\n        - For pattern-based replacements, consider anchor operations in script_apply_edits\n        - Lines, columns are 1-indexed\n        - Tabs count as 1 column",
+          "inputSchema": {
+            "properties": {
+              "uri": {
+                "description": "URI of the script to edit under Assets/ directory, unity://path/Assets/... or file://... or Assets/...",
+                "type": "string"
+              },
+              "edits": {
+                "description": "List of edits to apply to the script, i.e. a list of {startLine,startCol,endLine,endCol,newText} (1-indexed!)",
+                "items": {
+                  "additionalProperties": true,
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              "precondition_sha256": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              },
+              "strict": {
+                "anyOf": [
+                  {
+                    "type": "boolean"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              },
+              "options": {
+                "anyOf": [
+                  {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              }
+            },
+            "required": [
+              "uri",
+              "edits"
+            ],
+            "type": "object"
+          },
+          "outputSchema": {
+            "additionalProperties": true,
+            "type": "object"
+          },
+          "_meta": {
+            "_fastmcp": {
+              "tags": []
+            }
+          }
+        },
+        {
+          "name": "create_script",
+          "description": "Create a new C# script at the given project path.",
+          "inputSchema": {
+            "properties": {
+              "path": {
+                "description": "Path under Assets/ to create the script at, e.g., 'Assets/Scripts/My.cs'",
+                "type": "string"
+              },
+              "contents": {
+                "description": "Contents of the script to create (plain text C# code). The server handles Base64 encoding.",
+                "type": "string"
+              },
+              "script_type": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              },
+              "namespace": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              }
+            },
+            "required": [
+              "path",
+              "contents"
+            ],
+            "type": "object"
+          },
+          "outputSchema": {
+            "additionalProperties": true,
+            "type": "object"
+          },
+          "_meta": {
+            "_fastmcp": {
+              "tags": []
+            }
+          }
+        },
+        {
+          "name": "delete_script",
+          "description": "Delete a C# script by URI or Assets-relative path.",
+          "inputSchema": {
+            "properties": {
+              "uri": {
+                "description": "URI of the script to delete under Assets/ directory, unity://path/Assets/... or file://... or Assets/...",
+                "type": "string"
+              }
+            },
+            "required": [
+              "uri"
+            ],
+            "type": "object"
+          },
+          "outputSchema": {
+            "additionalProperties": true,
+            "type": "object"
+          },
+          "_meta": {
+            "_fastmcp": {
+              "tags": []
+            }
+          }
+        },
+        {
+          "name": "validate_script",
+          "description": "Validate a C# script and return diagnostics.",
+          "inputSchema": {
+            "properties": {
+              "uri": {
+                "description": "URI of the script to validate under Assets/ directory, unity://path/Assets/... or file://... or Assets/...",
+                "type": "string"
+              },
+              "level": {
+                "default": "basic",
+                "description": "Validation level",
+                "enum": [
+                  "basic",
+                  "standard"
+                ],
+                "type": "string"
+              },
+              "include_diagnostics": {
+                "default": false,
+                "description": "Include full diagnostics and summary",
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "uri"
+            ],
+            "type": "object"
+          },
+          "outputSchema": {
+            "additionalProperties": true,
+            "type": "object"
+          },
+          "_meta": {
+            "_fastmcp": {
+              "tags": []
+            }
+          }
+        },
+        {
+          "name": "manage_script",
+          "description": "Compatibility router for legacy script operations. Prefer apply_text_edits (ranges) or script_apply_edits (structured) for edits.",
+          "inputSchema": {
+            "properties": {
+              "action": {
+                "description": "Perform CRUD operations on C# scripts.",
+                "enum": [
+                  "create",
+                  "read",
+                  "delete"
+                ],
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "path": {
+                "type": "string"
+              },
+              "contents": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              },
+              "script_type": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              },
+              "namespace": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              }
+            },
+            "required": [
+              "action",
+              "name",
+              "path"
+            ],
+            "type": "object"
+          },
+          "outputSchema": {
+            "additionalProperties": true,
+            "type": "object"
+          },
+          "_meta": {
+            "_fastmcp": {
+              "tags": []
+            }
+          }
+        },
+        {
+          "name": "manage_script_capabilities",
+          "description": "Get manage_script capabilities (supported ops, limits, and guards).\n    Returns:\n        - ops: list of supported structured ops\n        - text_ops: list of supported text ops\n        - max_edit_payload_bytes: server edit payload cap\n        - guards: header/using guard enabled flag",
+          "inputSchema": {
+            "properties": {},
+            "type": "object"
+          },
+          "outputSchema": {
+            "additionalProperties": true,
+            "type": "object"
+          },
+          "_meta": {
+            "_fastmcp": {
+              "tags": []
+            }
+          }
+        },
+        {
+          "name": "get_sha",
+          "description": "Get SHA256 and basic metadata for a Unity C# script without returning file contents",
+          "inputSchema": {
+            "properties": {
+              "uri": {
+                "description": "URI of the script to edit under Assets/ directory, unity://path/Assets/... or file://... or Assets/...",
+                "type": "string"
+              }
+            },
+            "required": [
+              "uri"
+            ],
+            "type": "object"
+          },
+          "outputSchema": {
+            "additionalProperties": true,
+            "type": "object"
+          },
+          "_meta": {
+            "_fastmcp": {
+              "tags": []
+            }
+          }
+        },
+        {
+          "name": "manage_shader",
+          "description": "Manages shader scripts in Unity (create, read, update, delete).",
+          "inputSchema": {
+            "properties": {
+              "action": {
+                "description": "Perform CRUD operations on shader scripts.",
+                "enum": [
+                  "create",
+                  "read",
+                  "update",
+                  "delete"
+                ],
+                "type": "string"
+              },
+              "name": {
+                "description": "Shader name (no .cs extension)",
+                "type": "string"
+              },
+              "path": {
+                "description": "Asset path (default: \"Assets/\")",
+                "type": "string"
+              },
+              "contents": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              }
+            },
+            "required": [
+              "action",
+              "name",
+              "path"
+            ],
+            "type": "object"
+          },
+          "outputSchema": {
+            "additionalProperties": true,
+            "type": "object"
+          },
+          "_meta": {
+            "_fastmcp": {
+              "tags": []
+            }
+          }
+        },
+        {
+          "name": "read_console",
+          "description": "Gets messages from or clears the Unity Editor console. Note: For maximum client compatibility, pass count as a quoted string (e.g., '5').",
+          "inputSchema": {
+            "properties": {
+              "action": {
+                "anyOf": [
+                  {
+                    "enum": [
+                      "get",
+                      "clear"
+                    ],
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              },
+              "types": {
+                "anyOf": [
+                  {
+                    "items": {
+                      "enum": [
+                        "error",
+                        "warning",
+                        "log",
+                        "all"
+                      ],
+                      "type": "string"
+                    },
+                    "type": "array"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              },
+              "count": {
+                "anyOf": [
+                  {
+                    "type": "integer"
+                  },
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              },
+              "filter_text": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              },
+              "since_timestamp": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              },
+              "format": {
+                "anyOf": [
+                  {
+                    "enum": [
+                      "plain",
+                      "detailed",
+                      "json"
+                    ],
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              },
+              "include_stacktrace": {
+                "anyOf": [
+                  {
+                    "type": "boolean"
+                  },
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              }
+            },
+            "type": "object"
+          },
+          "outputSchema": {
+            "additionalProperties": true,
+            "type": "object"
+          },
+          "_meta": {
+            "_fastmcp": {
+              "tags": []
+            }
+          }
+        },
+        {
+          "name": "run_tests",
+          "description": "Runs Unity tests for the specified mode",
+          "inputSchema": {
+            "properties": {
+              "mode": {
+                "default": "EditMode",
+                "description": "Unity test mode to run",
+                "enum": [
+                  "EditMode",
+                  "PlayMode"
+                ],
+                "type": "string"
+              },
+              "timeout_seconds": {
+                "anyOf": [
+                  {
+                    "anyOf": [
+                      {
+                        "type": "integer"
+                      },
+                      {
+                        "type": "string"
+                      }
+                    ],
+                    "description": "Optional timeout in seconds for the Unity test run (string, e.g. '30')"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              }
+            },
+            "type": "object"
+          },
+          "outputSchema": {
+            "$defs": {
+              "RunTestsResult": {
+                "properties": {
+                  "mode": {
+                    "type": "string"
+                  },
+                  "summary": {
+                    "$ref": "#/$defs/RunTestsSummary"
+                  },
+                  "results": {
+                    "items": {
+                      "$ref": "#/$defs/RunTestsTestResult"
+                    },
+                    "type": "array"
+                  }
+                },
+                "required": [
+                  "mode",
+                  "summary",
+                  "results"
+                ],
+                "type": "object"
+              },
+              "RunTestsSummary": {
+                "properties": {
+                  "total": {
+                    "type": "integer"
+                  },
+                  "passed": {
+                    "type": "integer"
+                  },
+                  "failed": {
+                    "type": "integer"
+                  },
+                  "skipped": {
+                    "type": "integer"
+                  },
+                  "durationSeconds": {
+                    "type": "number"
+                  },
+                  "resultState": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "total",
+                  "passed",
+                  "failed",
+                  "skipped",
+                  "durationSeconds",
+                  "resultState"
+                ],
+                "type": "object"
+              },
+              "RunTestsTestResult": {
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "fullName": {
+                    "type": "string"
+                  },
+                  "state": {
+                    "type": "string"
+                  },
+                  "durationSeconds": {
+                    "type": "number"
+                  },
+                  "message": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "default": null
+                  },
+                  "stackTrace": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "default": null
+                  },
+                  "output": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "default": null
+                  }
+                },
+                "required": [
+                  "name",
+                  "fullName",
+                  "state",
+                  "durationSeconds"
+                ],
+                "type": "object"
+              }
+            },
+            "properties": {
+              "success": {
+                "type": "boolean"
+              },
+              "message": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              },
+              "error": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              },
+              "data": {
+                "anyOf": [
+                  {
+                    "$ref": "#/$defs/RunTestsResult"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              },
+              "hint": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              }
+            },
+            "required": [
+              "success"
+            ],
+            "type": "object"
+          },
+          "_meta": {
+            "_fastmcp": {
+              "tags": []
+            }
+          }
+        },
+        {
+          "name": "script_apply_edits",
+          "description": "Structured C# edits (methods/classes) with safer boundaries - prefer this over raw text.\n    Best practices:\n    - Prefer anchor_* ops for pattern-based insert/replace near stable markers\n    - Use replace_method/delete_method for whole-method changes (keeps signatures balanced)\n    - Avoid whole-file regex deletes; validators will guard unbalanced braces\n    - For tail insertions, prefer anchor/regex_replace on final brace (class closing)\n    - Pass options.validate='standard' for structural checks; 'relaxed' for interior-only edits\n    Canonical fields (use these exact keys):\n    - op: replace_method | insert_method | delete_method | anchor_insert | anchor_delete | anchor_replace\n    - className: string (defaults to 'name' if omitted on method/class ops)\n    - methodName: string (required for replace_method, delete_method)\n    - replacement: string (required for replace_method, insert_method)\n    - position: start | end | after | before (insert_method only)\n    - afterMethodName / beforeMethodName: string (required when position='after'/'before')\n    - anchor: regex string (for anchor_* ops)\n    - text: string (for anchor_insert/anchor_replace)\n    Examples:\n    1) Replace a method:\n    {\n        \"name\": \"SmartReach\",\n        \"path\": \"Assets/Scripts/Interaction\",\n        \"edits\": [\n        {\n        \"op\": \"replace_method\",\n        \"className\": \"SmartReach\",\n        \"methodName\": \"HasTarget\",\n        \"replacement\": \"public bool HasTarget(){ return currentTarget!=null; }\"\n        }\n    ],\n    \"options\": {\"validate\": \"standard\", \"refresh\": \"immediate\"}\n    }\n    \"2) Insert a method after another:\n    {\n        \"name\": \"SmartReach\",\n        \"path\": \"Assets/Scripts/Interaction\",\n        \"edits\": [\n        {\n        \"op\": \"insert_method\",\n        \"className\": \"SmartReach\",\n        \"replacement\": \"public void PrintSeries(){ Debug.Log(seriesName); }\",\n        \"position\": \"after\",\n        \"afterMethodName\": \"GetCurrentTarget\"\n        }\n    ],\n    }\n    ]",
+          "inputSchema": {
+            "properties": {
+              "name": {
+                "description": "Name of the script to edit",
+                "type": "string"
+              },
+              "path": {
+                "description": "Path to the script to edit under Assets/ directory",
+                "type": "string"
+              },
+              "edits": {
+                "anyOf": [
+                  {
+                    "items": {
+                      "additionalProperties": true,
+                      "type": "object"
+                    },
+                    "type": "array"
+                  },
+                  {
+                    "type": "string"
+                  }
+                ],
+                "description": "List of edits to apply to the script (JSON list or stringified JSON)"
+              },
+              "options": {
+                "anyOf": [
+                  {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              },
+              "script_type": {
+                "default": "MonoBehaviour",
+                "description": "Type of the script to edit",
+                "type": "string"
+              },
+              "namespace": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              }
+            },
+            "required": [
+              "name",
+              "path",
+              "edits"
+            ],
+            "type": "object"
+          },
+          "outputSchema": {
+            "additionalProperties": true,
+            "type": "object"
+          },
+          "_meta": {
+            "_fastmcp": {
+              "tags": []
+            }
+          }
+        },
+        {
+          "name": "set_active_instance",
+          "description": "Set the active Unity instance for this client/session. Accepts Name@hash or hash.",
+          "inputSchema": {
+            "properties": {
+              "instance": {
+                "description": "Target instance (Name@hash or hash prefix)",
+                "type": "string"
+              }
+            },
+            "required": [
+              "instance"
+            ],
+            "type": "object"
+          },
+          "outputSchema": {
+            "additionalProperties": true,
+            "type": "object"
+          },
+          "_meta": {
+            "_fastmcp": {
+              "tags": []
+            }
+          }
+        }
+      ]
+    }
+  }
+]

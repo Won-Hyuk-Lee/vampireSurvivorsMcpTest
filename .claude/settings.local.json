@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python mcp_list_resources.py:*)",
+      "Bash(python mcp_list_tools.py:*)",
+      "Bash(python:*)"
+    ]
+  }
+}
